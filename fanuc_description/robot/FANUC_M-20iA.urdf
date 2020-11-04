@@ -175,7 +175,7 @@
         <!-- link properties -->
 
         <visual>
-            <origin xyz="0 ${1} ${-0.525 -0.79 -0.15}" rpy="0 0 ${-pi/2}" />
+            <origin xyz="0 ${0.86 + 0.15} ${-0.525 -0.79 -0.15}" rpy="0 0 ${-pi/2}" />
             <geometry>
                 <mesh filename="package://${VISUAL_DIR}/link_5.dae" />
             </geometry>
@@ -183,7 +183,7 @@
         </visual>
 
         <collision>
-            <origin xyz="0 ${1} ${-0.525 -0.79 -0.15}" rpy="0 0 ${-pi/2}" />
+            <origin xyz="0 ${0.86 + 0.15} ${-0.525 -0.79 -0.15}" rpy="0 0 ${-pi/2}" />
             <geometry>
                 <mesh filename="package://${COLLISION_DIR}/link_5.stl" />
             </geometry>
