@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+    This URDF uses the Denavit-Hartenberg (DH) conventions to place the reference frames of the joints.
+    It uses offsets to correctly place the visual and collision meshes.
+-->
+
+<!-- ******************** FANUC M-20iA URDF ******************** -->
+
+<robot name="M-20iA" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- This variable contains the name of the robot description package -->
+    <xacro:property name="NAME_OF_PACKAGE" value="'fanuc_description'" />
+
+    <!-- This variable contains the name of the robot meshes -->
+    <xacro:property name="MESHES_DIR" value="${NAME_OF_PACKAGE}/meshes" />
+
+    <!-- This variable contains the name of the robot visual meshes -->
+    <xacro:property name="COLLISION_DIR" value="${MESHES_DIR}/collision" />
+    
+    <!-- This variable contains the name of the robot visual meshes -->
+    <xacro:property name="VISUAL_DIR" value="${MESHES_DIR}/visual" />
+
+    <!-- ******************** Used for fixing robot to Gazebo 'base_link' ******************** -->
+    <link name="world"/>
+
+    <joint name="virtual_joint" type="fixed">
+        <parent link="world"/>
+        <child link="base_link"/>
+    </joint>
+
+    <!-- ******************** BASE_LINK  ******************** -->
+    <link name="base_link">
+        <!--link properties-->
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://${VISUAL_DIR}/link_0.dae" />
+            </geometry>
+            <material name=""/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://${COLLISION_DIR}/link_0.stl" />
+            </geometry>
+        </collision>
+
+    </link>
+
+    <!-- ******************** LINK 1 ******************** -->
+    <link name="link1">
+        <!-- link properties -->
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://${VISUAL_DIR}/link_1.dae" />
+            </geometry>
+            <material name=""/>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://${COLLISION_DIR}/link_1.stl" />
+            </geometry>
+        </collision>
+        
+    </link>
+
+    <joint name="joint1" type="revolute">
+        <!-- Joint properties -->
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="link1" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.23" upper="3.23" effort="12" velocity="3.4" />
+    </joint>
+
+    <!-- ******************** LINK 2 ******************** -->
+    <link name="link2">
+        <!-- link properties -->
+
+        <visual>
+            <origin xyz="-0.15 -0.525 0" rpy="${-pi/2} 0 0" />
+            <geometry>
+                <mesh filename="package://${VISUAL_DIR}/link_2.dae" />
+            </geometry>
+            <material name=""/>
+        </visual>
+
+        <collision>
+            <origin xyz="-0.15 -0.525 0" rpy="${-pi/2} 0 0" />
+            <geometry>
+                <mesh filename="package://${COLLISION_DIR}/link_2.stl" />
+            </geometry>
+        </collision>
+        
+    </link>
+
+    <joint name="joint2" type="revolute">
+        <!-- Joint properties -->
+        <origin xyz="0.15 0 0.525" rpy="${pi/2} 0 0" />
+        <parent link="link1" />
+        <child link="link2" />
+        <axis xyz="0 0 1" />
+        <limit lower="-1.75" upper="2.79" effort="12" velocity="3.05" />
+    </joint>
+
+    <!-- ******************** LINK 3 ******************** -->
+    <link name="link3">
+        <!-- link properties -->
+
+        <visual>
+            <origin xyz="-0.15 ${-0.525 -0.79} 0" rpy="${-pi/2} 0 0" />
+            <geometry>
+                <mesh filename="package://${VISUAL_DIR}/link_3.dae" />
+            </geometry>
+            <material name=""/>
+        </visual>
+
+        <collision>
+            <origin xyz="-0.15 ${-0.525 -0.79} 0" rpy="${-pi/2} 0 0" />
+            <geometry>
+                <mesh filename="package://${COLLISION_DIR}/link_3.stl" />
+            </geometry>
+        </collision>
+        
+    </link>
+
+    <joint name="joint3" type="revolute">
+        <!-- Joint properties -->
+        <origin xyz="0 0.79 0" rpy="0 0 ${pi/2}" />
+        <parent link="link2" />
+        <child link="link3" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.23" upper="4.77" effort="12" velocity="3.14" />
+    </joint>
+
+    <!-- ******************** LINK 4 ******************** -->
+    <link name="link4">
+        <!-- link properties -->
+
+        <visual>
+            <origin xyz="${0} ${-0.525 -0.79 -0.15} ${0.79}" rpy="${pi/2} ${pi/2} ${pi}" />
+            <geometry>
+                <mesh filename="package://${VISUAL_DIR}/link_4.dae" />
+            </geometry>
+            <material name=""/>
+        </visual>
+
+        <collision>
+            <origin xyz="${0} ${-0.525 -0.79 -0.15} ${0.79}" rpy="${pi/2} ${pi/2} ${pi}" />
+            <geometry>
+                <mesh filename="package://${COLLISION_DIR}/link_4.stl" />
+            </geometry>
+        </collision>
+        
+    </link>
+
+    <joint name="joint4" type="revolute">
+        <!-- Joint properties -->
+        <origin xyz="0.15 0 0" rpy="${pi/2} 0 0" />
+        <parent link="link3" />
+        <child link="link4" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.49" upper="3.49" effort="12" velocity="6.28" />
+    </joint>    
+
+</robot>
