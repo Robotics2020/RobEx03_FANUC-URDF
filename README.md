@@ -9,6 +9,7 @@ Third exercise for Robotics course @UniSa. Academic Year 2020/2021.
 5. Verify the results by comparing with manual/MATLAB calculations.
 
 In particular, the robot model will be FANUC M-20iA: please refer to the following documents for further information:
+
 * [FANUC M-10iA / M-20iA Operating Space](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_description/doc/FANUC_M-10iA_M-20iA_drawing.pdf)
 * [FANUC ARC Mate 120iC / M-20iA Manual](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_description/doc/FANUC_M-20iA_manual.pdf)
 

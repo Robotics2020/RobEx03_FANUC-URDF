@@ -32,223 +32,130 @@
     <!-- This variable contains the name of the robot visual meshes -->
     <xacro:property name="VISUAL_DIR" value="${MESHES_DIR}/visual" />
 
+    <!-- Macro for creating the virtual joint -->
+    <xacro:macro name="create_virtual_joint" params="child_link:='base_link'" >
+        <link name="world" />
+
+        <joint name="virtual_joint" type="fixed">
+            <parent link="world"/>
+            <child link="${child_link}"/>
+        </joint>
+    </xacro:macro>
+
+    <!-- Macro for creating a joint -->
+    <xacro:macro name="create_joint" params="index joint_name:='None' joint_type:='revolute' xyz:='0 0 0' rpy:='0 0 0' parent_link child_link axis:='0 0 1' lower_limit:=${-pi} upper_limit:=${pi} effort_limit:=0 velocity_limit:=${pi}">
+        <xacro:if value="${joint_name == 'None'}" >
+            <xacro:property name="joint_name" value="joint${index}" />
+        </xacro:if>
+        
+        <joint name="${joint_name}" type="${joint_type}">
+            <!-- joint properties -->
+            <origin xyz="${xyz}" rpy="${rpy}" />
+            <parent link="${parent_link}" />
+            <child link="${child_link}" />
+            <axis xyz="${axis}" />
+            <limit lower="${lower_limit}" upper="${upper_limit}" velocity="${velocity_limit}" effort="${effort_limit}" />
+        </joint>
+    </xacro:macro>
+
+    <!-- Macro for creating the flange -->
+    <xacro:macro name="create_flange" params="flange_name:='name' xyz:='0 0 0' rpy:='0 0 0' parent_link:='link6'" >
+        <link name="${flange_name}" />
+
+        <joint name="${flange_name}" type="fixed">
+            <origin xyz="${xyz}" rpy="${rpy}" />
+            <parent link="${parent_link}" />
+            <child link="${flange_name}" />
+        </joint>
+    </xacro:macro>
+
+    <!-- Macro for creating a link and a joint -->
+    <xacro:macro name="link_joint" params="index xyz:='0 0 0' rpy:='0 0 0' link_name:='None' joint_name:='None' joint_type:='revolute' parent_link:='None' child_link:='None' joint_origin_xyz:='0 0 0' joint_origin_rpy:='0 0 0' lower_limit:=${-pi} upper_limit:=${pi} effort_limit:=0 velocity_limit:=${pi}">
+
+        <xacro:if value="${link_name == 'None'}" >
+            <xacro:if value="${index == 0}" >
+                <xacro:property name="link_name" value="base_link" />
+            </xacro:if>
+            <xacro:unless value="${index == 0}" >
+                <xacro:property name="link_name" value="link${index}" />   
+            </xacro:unless>
+        </xacro:if>
+
+        <link name="${link_name}">
+            <!-- link properties -->
+
+            <visual>
+                <origin xyz="${xyz}" rpy="${rpy}" />
+                <geometry>
+                    <mesh filename="package://${VISUAL_DIR}/link_${index}.dae" />
+                </geometry>
+                <material name="" />
+            </visual>
+
+            <collision>
+                <origin xyz="${xyz}" rpy="${rpy}" />
+                <geometry>
+                    <mesh filename="package://${COLLISION_DIR}/link_${index}.stl" />
+                </geometry>
+            </collision>
+
+        </link>
+
+        <xacro:if value="${index > 0}" >
+            <xacro:if value="${parent_link == 'None'}" >
+                <xacro:if value="${index == 1}" >
+                    <xacro:property name="parent_link" value="base_link" />
+                </xacro:if>
+                <xacro:unless value="${index == 1}" >
+                    <xacro:property name="parent_link" value="link${index - 1}" />   
+                </xacro:unless>
+            </xacro:if>
+
+            <xacro:if value="${child_link == 'None'}" >
+                <xacro:property name="child_link" value="${link_name}" />   
+            </xacro:if>
+
+            <xacro:create_joint index="${index}" joint_type="${joint_type}" xyz="${joint_origin_xyz}" rpy="${joint_origin_rpy}" parent_link="${parent_link}" child_link="${child_link}" lower_limit="${lower_limit}" upper_limit="${upper_limit}" effort_limit="${effort_limit}" velocity_limit="${velocity_limit}"/>
+        </xacro:if>
+
+    </xacro:macro>
+
     <!-- ******************** Used for fixing robot to Gazebo 'base_link' ******************** -->
-    <link name="world"/>
+    <xacro:create_virtual_joint />
 
-    <joint name="virtual_joint" type="fixed">
-        <parent link="world"/>
-        <child link="base_link"/>
-    </joint>
-
-    <!-- ******************** BASE_LINK  ******************** -->
-    <link name="base_link">
-        <!--link properties-->
-
-        <visual>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-            <geometry>
-                <mesh filename="package://${VISUAL_DIR}/link_0.dae" />
-            </geometry>
-            <material name=""/>
-        </visual>
-
-        <collision>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-            <geometry>
-                <mesh filename="package://${COLLISION_DIR}/link_0.stl" />
-            </geometry>
-        </collision>
-
-    </link>
+    <!-- ******************** BASE LINK  ******************** -->
+    <xacro:link_joint index="0" />
 
     <!-- ******************** LINK 1 ******************** -->
-    <link name="link1">
-        <!-- link properties -->
-
-        <visual>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-            <geometry>
-                <mesh filename="package://${VISUAL_DIR}/link_1.dae" />
-            </geometry>
-            <material name=""/>
-        </visual>
-
-        <collision>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-            <geometry>
-                <mesh filename="package://${COLLISION_DIR}/link_1.stl" />
-            </geometry>
-        </collision>
-        
-    </link>
-
-    <joint name="joint1" type="revolute">
-        <!-- Joint properties -->
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="base_link" />
-        <child link="link1" />
-        <axis xyz="0 0 1" />
-        <limit lower="-3.23" upper="3.23" effort="12" velocity="3.4" />
-    </joint>
+    <xacro:link_joint index="1"
+    lower_limit="-3.23" upper_limit="3.23" effort_limit="12" velocity_limit="3.4" />
 
     <!-- ******************** LINK 2 ******************** -->
-    <link name="link2">
-        <!-- link properties -->
-
-        <visual>
-            <origin xyz="${-dhparam['a'][0]} ${-dhparam['d'][0]} 0" rpy="${-pi/2} 0 0" />
-            <geometry>
-                <mesh filename="package://${VISUAL_DIR}/link_2.dae" />
-            </geometry>
-            <material name=""/>
-        </visual>
-
-        <collision>
-            <origin xyz="${-dhparam['a'][0]} ${-dhparam['d'][0]} 0" rpy="${-pi/2} 0 0" />
-            <geometry>
-                <mesh filename="package://${COLLISION_DIR}/link_2.stl" />
-            </geometry>
-        </collision>
-        
-    </link>
-
-    <joint name="joint2" type="revolute">
-        <!-- Joint properties -->
-        <origin xyz="${dhparam['a'][0]} 0 ${dhparam['d'][0]}" rpy="${dhparam['alpha'][0]} 0 ${dhparam['theta'][0]}" />
-        <parent link="link1" />
-        <child link="link2" />
-        <axis xyz="0 0 1" />
-        <limit lower="-1.75" upper="2.79" effort="12" velocity="3.05" />
-    </joint>
+    <xacro:link_joint index="2" xyz="${-dhparam['a'][0]} ${-dhparam['d'][0]} 0" rpy="${-pi/2} 0 0"
+    joint_origin_xyz="${dhparam['a'][0]} 0 ${dhparam['d'][0]}" joint_origin_rpy="${dhparam['alpha'][0]} 0 ${dhparam['theta'][0]}"
+    lower_limit="-1.75" upper_limit="2.79" effort_limit="12" velocity_limit="3.05" />
 
     <!-- ******************** LINK 3 ******************** -->
-    <link name="link3">
-        <!-- link properties -->
-
-        <visual>
-            <origin xyz="${-dhparam['a'][1] - dhparam['d'][0]} ${dhparam['a'][0]} 0" rpy="${-pi/2} 0 ${-pi/2}" />
-            <geometry>
-                <mesh filename="package://${VISUAL_DIR}/link_3.dae" />
-            </geometry>
-            <material name=""/>
-        </visual>
-
-        <collision>
-            <origin xyz="${-dhparam['a'][1] - dhparam['d'][0]} ${dhparam['a'][0]} 0" rpy="${-pi/2} 0 ${-pi/2}" />
-            <geometry>
-                <mesh filename="package://${COLLISION_DIR}/link_3.stl" />
-            </geometry>
-        </collision>
-        
-    </link>
-
-    <joint name="joint3" type="revolute">
-        <!-- Joint properties -->
-        <origin xyz="0 ${dhparam['a'][1]} ${dhparam['d'][1]}" rpy="${dhparam['alpha'][1]} 0 ${dhparam['theta'][1]}" />
-        <parent link="link2" />
-        <child link="link3" />
-        <axis xyz="0 0 1" />
-        <limit lower="-3.23" upper="4.77" effort="12" velocity="3.14" />
-    </joint>
+    <xacro:link_joint index="3" xyz="${-dhparam['a'][1] - dhparam['d'][0]} ${dhparam['a'][0]} 0" rpy="${-pi/2} 0 ${-pi/2}"
+    joint_origin_xyz="0 ${dhparam['a'][1]} ${dhparam['d'][1]}" joint_origin_rpy="${dhparam['alpha'][1]} 0 ${dhparam['theta'][1]}"
+    lower_limit="-3.23" upper_limit="4.77" effort_limit="12" velocity_limit="3.14" />
 
     <!-- ******************** LINK 4 ******************** -->
-    <link name="link4">
-        <!-- link properties -->
-
-        <visual>
-            <origin xyz="${dhparam['a'][2] +dhparam['a'][1] +dhparam['d'][0]} 0 ${-dhparam['a'][0]}" rpy="0 ${-pi/2} 0" />
-            <geometry>
-                <mesh filename="package://${VISUAL_DIR}/link_4.dae" />
-            </geometry>
-            <material name=""/>
-        </visual>
-
-        <collision>
-            <origin xyz="${dhparam['a'][2] +dhparam['a'][1] +dhparam['d'][0]} 0 ${-dhparam['a'][0]}" rpy="0 ${-pi/2} 0" />
-            <geometry>
-                <mesh filename="package://${COLLISION_DIR}/link_4.stl" />
-            </geometry>
-        </collision>
-        
-    </link>
-
-    <joint name="joint4" type="revolute">
-        <!-- Joint properties -->
-        <origin xyz="${dhparam['a'][2]} 0 ${dhparam['d'][2]}" rpy="${dhparam['alpha'][2]} 0 ${dhparam['theta'][2]}" />
-        <parent link="link3" />
-        <child link="link4" />
-        <axis xyz="0 0 1" />
-        <limit lower="-3.49" upper="3.49" effort="20" velocity="7.07" />
-    </joint>
+    <xacro:link_joint index="4" xyz="${dhparam['a'][2] +dhparam['a'][1] +dhparam['d'][0]} 0 ${-dhparam['a'][0]}" rpy="0 ${-pi/2} 0"
+    joint_origin_xyz="${dhparam['a'][2]} 0 ${dhparam['d'][2]}" joint_origin_rpy="${dhparam['alpha'][2]} 0 ${dhparam['theta'][2]}"
+    lower_limit="-3.49" upper_limit="3.49" effort_limit="20" velocity_limit="7.07" />
 
     <!-- ******************** LINK 5 ******************** -->
-    <link name="link5">
-        <!-- link properties -->
-
-        <visual>
-            <origin xyz="0 ${dhparam['d'][3] + dhparam['a'][0]} ${-dhparam['a'][2] -dhparam['a'][1] -dhparam['d'][0]}" rpy="0 0 ${-pi/2}" />
-            <geometry>
-                <mesh filename="package://${VISUAL_DIR}/link_5.dae" />
-            </geometry>
-            <material name=""/>
-        </visual>
-
-        <collision>
-            <origin xyz="0 ${dhparam['d'][3] + dhparam['a'][0]} ${-dhparam['a'][2] -dhparam['a'][1] -dhparam['d'][0]}" rpy="0 0 ${-pi/2}" />
-            <geometry>
-                <mesh filename="package://${COLLISION_DIR}/link_5.stl" />
-            </geometry>
-        </collision>
-        
-    </link>
-
-    <joint name="joint5" type="revolute">
-        <!-- Joint properties -->
-        <origin xyz="0 ${dhparam['a'][3]} ${dhparam['d'][3]}" rpy="${dhparam['alpha'][3]} 0 ${dhparam['theta'][3]}" />
-        <parent link="link4" />
-        <child link="link5" />
-        <axis xyz="0 0 1" />
-        <limit lower="-2.44" upper="2.44" effort="20" velocity="7.07" />
-    </joint>
+    <xacro:link_joint index="5" xyz="0 ${dhparam['d'][3] + dhparam['a'][0]} ${-dhparam['a'][2] -dhparam['a'][1] -dhparam['d'][0]}" rpy="0 0 ${-pi/2}"
+    joint_origin_xyz="0 ${dhparam['a'][3]} ${dhparam['d'][3]}" joint_origin_rpy="${dhparam['alpha'][3]} 0 ${dhparam['theta'][3]}"
+    lower_limit="-2.44" upper_limit="2.44" effort_limit="20" velocity_limit="7.07" />
 
     <!-- ******************** LINK 6 ******************** -->
-    <link name="link6">
-        <!-- link properties -->
-
-        <visual>
-            <origin xyz="0 0 ${dhparam['d'][5]}" rpy="0 0 0" />
-            <geometry>
-                <mesh filename="package://${VISUAL_DIR}/link_6.dae" />
-            </geometry>
-            <material name=""/>
-        </visual>
-
-        <collision>
-            <origin xyz="0 0 ${dhparam['d'][5]}" rpy="0 0 0" />
-            <geometry>
-                <mesh filename="package://${COLLISION_DIR}/link_6.stl" />
-            </geometry>
-        </collision>
-        
-    </link>
-
-    <joint name="joint6" type="revolute">
-        <!-- Joint properties -->
-        <origin xyz="${dhparam['a'][4]} 0 ${dhparam['d'][4]}" rpy="${dhparam['alpha'][4]} 0 ${dhparam['theta'][4]}" />
-        <parent link="link5" />
-        <child link="link6" />
-        <axis xyz="0 0 1" />
-        <limit lower="-4.71" upper="4.71" effort="20" velocity="10.73" />
-    </joint>
+    <xacro:link_joint index="6" xyz="0 0 ${dhparam['d'][5]}" rpy="0 0 0"
+    joint_origin_xyz="${dhparam['a'][4]} 0 ${dhparam['d'][4]}" joint_origin_rpy="${dhparam['alpha'][4]} 0 ${dhparam['theta'][4]}"
+    lower_limit="-4.71" upper_limit="4.71" effort_limit="20" velocity_limit="10.73" />
 
     <!-- ******************** FLANGE ******************** -->
-    <link name="flange"/>
-
-    <joint name="flange" type="fixed">
-        <!-- Joint properties -->
-        <origin xyz="${dhparam['a'][5]} 0 ${dhparam['d'][5]}" rpy="${dhparam['alpha'][5]} 0 ${dhparam['theta'][5]}" />
-        <parent link="link6" />
-        <child link="flange" />
-    </joint>
+    <xacro:create_flange xyz="${dhparam['a'][5]} 0 ${dhparam['d'][5]}"/>
 
 </robot>
