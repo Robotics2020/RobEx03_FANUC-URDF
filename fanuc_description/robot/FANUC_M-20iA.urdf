@@ -5,11 +5,11 @@
     It uses offsets to correctly place the visual and collision meshes.
 -->
 
-<!-- ******************** FANUC M-20iA URDF ******************** -->
+<!-- **************************************** FANUC M-20iA URDF **************************************** -->
 
 <robot name="M-20iA" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <!-- ******************** VARIABLES ******************** -->
+    <!-- **************************************** VARIABLES **************************************** -->
 
     <!-- This variable contains the DH parameters -->
     <xacro:property name="dhparam" value="${dict(
@@ -32,6 +32,8 @@
     <!-- This variable contains the name of the robot visual meshes -->
     <xacro:property name="VISUAL_DIR" value="${MESHES_DIR}/visual" />
 
+    <!-- **************************************** MACROS **************************************** -->
+
     <!-- Macro for creating the virtual joint -->
     <xacro:macro name="create_virtual_joint" params="child_link:='base_link'" >
         <link name="world" />
@@ -43,8 +45,8 @@
     </xacro:macro>
 
     <!-- Macro for creating a joint -->
-    <xacro:macro name="create_joint" params="index joint_name:='None' joint_type:='revolute' xyz:='0 0 0' rpy:='0 0 0' parent_link child_link axis:='0 0 1' lower_limit:=${-pi} upper_limit:=${pi} effort_limit:=0 velocity_limit:=${pi}">
-        <xacro:if value="${joint_name == 'None'}" >
+    <xacro:macro name="create_joint" params="index joint_name:='' joint_type:='revolute' xyz:='0 0 0' rpy:='0 0 0' parent_link child_link axis:='0 0 1' lower_limit:=${-pi} upper_limit:=${pi} effort_limit:=0 velocity_limit:=${pi}">
+        <xacro:if value="${joint_name == ''}" >
             <xacro:property name="joint_name" value="joint${index}" />
         </xacro:if>
         
@@ -70,9 +72,9 @@
     </xacro:macro>
 
     <!-- Macro for creating a link and a joint -->
-    <xacro:macro name="link_joint" params="index xyz:='0 0 0' rpy:='0 0 0' link_name:='None' joint_name:='None' joint_type:='revolute' parent_link:='None' child_link:='None' joint_origin_xyz:='0 0 0' joint_origin_rpy:='0 0 0' lower_limit:=${-pi} upper_limit:=${pi} effort_limit:=0 velocity_limit:=${pi}">
+    <xacro:macro name="link_joint" params="index xyz:='0 0 0' rpy:='0 0 0' link_name:='' joint_name:='' joint_type:='revolute' parent_link:='' child_link:='' joint_origin_xyz:='0 0 0' joint_origin_rpy:='0 0 0' lower_limit:=${-pi} upper_limit:=${pi} effort_limit:=0 velocity_limit:=${pi}">
 
-        <xacro:if value="${link_name == 'None'}" >
+        <xacro:if value="${link_name == ''}" >
             <xacro:if value="${index == 0}" >
                 <xacro:property name="link_name" value="base_link" />
             </xacro:if>
@@ -102,7 +104,7 @@
         </link>
 
         <xacro:if value="${index > 0}" >
-            <xacro:if value="${parent_link == 'None'}" >
+            <xacro:if value="${parent_link == ''}" >
                 <xacro:if value="${index == 1}" >
                     <xacro:property name="parent_link" value="base_link" />
                 </xacro:if>
@@ -111,7 +113,7 @@
                 </xacro:unless>
             </xacro:if>
 
-            <xacro:if value="${child_link == 'None'}" >
+            <xacro:if value="${child_link == ''}" >
                 <xacro:property name="child_link" value="${link_name}" />   
             </xacro:if>
 
@@ -119,6 +121,8 @@
         </xacro:if>
 
     </xacro:macro>
+    
+    <!-- **************************************** LINKS **************************************** -->
 
     <!-- ******************** Used for fixing robot to Gazebo 'base_link' ******************** -->
     <xacro:create_virtual_joint />
