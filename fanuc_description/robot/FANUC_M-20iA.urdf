@@ -114,7 +114,7 @@
 
     <joint name="joint2" type="revolute">
         <!-- Joint properties -->
-        <origin xyz="${-dhparam['a'][0]} 0 ${dhparam['d'][0]}" rpy="${dhparam['alpha'][0]} 0 ${dhparam['theta'][0]}" />
+        <origin xyz="${dhparam['a'][0]} 0 ${dhparam['d'][0]}" rpy="${dhparam['alpha'][0]} 0 ${dhparam['theta'][0]}" />
         <parent link="link1" />
         <child link="link2" />
         <axis xyz="0 0 1" />
@@ -126,7 +126,7 @@
         <!-- link properties -->
 
         <visual>
-            <origin xyz="${-dhparam['a'][0]} ${-dhparam['d'][0] -dhparam['a'][1]} 0" rpy="${-pi/2} 0 0" />
+            <origin xyz="${-dhparam['a'][1] - dhparam['d'][0]} ${dhparam['a'][0]} 0" rpy="${-pi/2} 0 ${-pi/2}" />
             <geometry>
                 <mesh filename="package://${VISUAL_DIR}/link_3.dae" />
             </geometry>
@@ -134,7 +134,7 @@
         </visual>
 
         <collision>
-            <origin xyz="${-dhparam['a'][0]} ${-dhparam['d'][0] -dhparam['a'][1]} 0" rpy="${-pi/2} 0 0" />
+            <origin xyz="${-dhparam['a'][1] - dhparam['d'][0]} ${dhparam['a'][0]} 0" rpy="${-pi/2} 0 ${-pi/2}" />
             <geometry>
                 <mesh filename="package://${COLLISION_DIR}/link_3.stl" />
             </geometry>
@@ -144,7 +144,7 @@
 
     <joint name="joint3" type="revolute">
         <!-- Joint properties -->
-        <origin xyz="0 ${dhparam['a'][1]} 0" rpy="${dhparam['alpha'][1]} 0 ${dhparam['theta'][1]}" />
+        <origin xyz="0 ${dhparam['a'][1]} ${dhparam['d'][1]}" rpy="${dhparam['alpha'][1]} 0 ${dhparam['theta'][1]}" />
         <parent link="link2" />
         <child link="link3" />
         <axis xyz="0 0 1" />
@@ -156,7 +156,7 @@
         <!-- link properties -->
 
         <visual>
-            <origin xyz="0 ${-dhparam['d'][0] -dhparam['a'][1] -dhparam['a'][2]} ${dhparam['d'][3]}" rpy="${pi/2} ${pi/2} ${pi}" />
+            <origin xyz="${dhparam['a'][2] +dhparam['a'][1] +dhparam['d'][0]} 0 ${-dhparam['a'][0]}" rpy="0 ${-pi/2} 0" />
             <geometry>
                 <mesh filename="package://${VISUAL_DIR}/link_4.dae" />
             </geometry>
@@ -164,7 +164,7 @@
         </visual>
 
         <collision>
-            <origin xyz="0 ${-dhparam['d'][0] -dhparam['a'][1] -dhparam['a'][2]} ${dhparam['d'][3]}" rpy="${pi/2} ${pi/2} ${pi}" />
+            <origin xyz="${dhparam['a'][2] +dhparam['a'][1] +dhparam['d'][0]} 0 ${-dhparam['a'][0]}" rpy="0 ${-pi/2} 0" />
             <geometry>
                 <mesh filename="package://${COLLISION_DIR}/link_4.stl" />
             </geometry>
@@ -174,11 +174,11 @@
 
     <joint name="joint4" type="revolute">
         <!-- Joint properties -->
-        <origin xyz="${dhparam['a'][2]} 0 0" rpy="${dhparam['alpha'][2]} 0 ${dhparam['theta'][2]}" />
+        <origin xyz="${dhparam['a'][2]} 0 ${dhparam['d'][2]}" rpy="${dhparam['alpha'][2]} 0 ${dhparam['theta'][2]}" />
         <parent link="link3" />
         <child link="link4" />
         <axis xyz="0 0 1" />
-        <limit lower="-3.49" upper="3.49" effort="12" velocity="7.07" />
+        <limit lower="-3.49" upper="3.49" effort="20" velocity="7.07" />
     </joint>
 
     <!-- ******************** LINK 5 ******************** -->
@@ -186,7 +186,7 @@
         <!-- link properties -->
 
         <visual>
-            <origin xyz="0 ${dhparam['d'][3] + dhparam['a'][0]} ${-dhparam['d'][0] -dhparam['a'][1] -dhparam['a'][2]}" rpy="0 0 ${-pi/2}" />
+            <origin xyz="0 ${dhparam['d'][3] + dhparam['a'][0]} ${-dhparam['a'][2] -dhparam['a'][1] -dhparam['d'][0]}" rpy="0 0 ${-pi/2}" />
             <geometry>
                 <mesh filename="package://${VISUAL_DIR}/link_5.dae" />
             </geometry>
@@ -194,7 +194,7 @@
         </visual>
 
         <collision>
-            <origin xyz="0 ${dhparam['d'][3] + dhparam['a'][0]} ${-dhparam['d'][0] -dhparam['a'][1] -dhparam['a'][2]}" rpy="0 0 ${-pi/2}" />
+            <origin xyz="0 ${dhparam['d'][3] + dhparam['a'][0]} ${-dhparam['a'][2] -dhparam['a'][1] -dhparam['d'][0]}" rpy="0 0 ${-pi/2}" />
             <geometry>
                 <mesh filename="package://${COLLISION_DIR}/link_5.stl" />
             </geometry>
@@ -204,11 +204,11 @@
 
     <joint name="joint5" type="revolute">
         <!-- Joint properties -->
-        <origin xyz="0 0 0.51" rpy="${dhparam['alpha'][3]} 0 ${dhparam['theta'][3]}" />
+        <origin xyz="0 ${dhparam['a'][3]} ${dhparam['d'][3]}" rpy="${dhparam['alpha'][3]} 0 ${dhparam['theta'][3]}" />
         <parent link="link4" />
         <child link="link5" />
         <axis xyz="0 0 1" />
-        <limit lower="-2.44" upper="2.44" effort="12" velocity="7.07" />
+        <limit lower="-2.44" upper="2.44" effort="20" velocity="7.07" />
     </joint>
 
     <!-- ******************** LINK 6 ******************** -->
@@ -234,19 +234,19 @@
 
     <joint name="joint6" type="revolute">
         <!-- Joint properties -->
-        <origin xyz="0 0 0" rpy="${dhparam['alpha'][4]} 0 ${dhparam['theta'][4]}" />
+        <origin xyz="${dhparam['a'][4]} 0 ${dhparam['d'][4]}" rpy="${dhparam['alpha'][4]} 0 ${dhparam['theta'][4]}" />
         <parent link="link5" />
         <child link="link6" />
         <axis xyz="0 0 1" />
-        <limit lower="-4.71" upper="4.71" effort="12" velocity="10.73" />
+        <limit lower="-4.71" upper="4.71" effort="20" velocity="10.73" />
     </joint>
 
     <!-- ******************** FLANGE ******************** -->
     <link name="flange"/>
 
     <joint name="flange" type="fixed">
-        <!--Joint properties-->
-        <origin xyz="0 0 ${dhparam['d'][5]}" rpy="${dhparam['alpha'][5]} 0 ${dhparam['theta'][5]}" />
+        <!-- Joint properties -->
+        <origin xyz="${dhparam['a'][5]} 0 ${dhparam['d'][5]}" rpy="${dhparam['alpha'][5]} 0 ${dhparam['theta'][5]}" />
         <parent link="link6" />
         <child link="flange" />
     </joint>
