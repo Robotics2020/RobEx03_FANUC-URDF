@@ -1,0 +1,9 @@
+<launch>
+
+    <include file="$(find fanuc_moveit_config)/launch/demo.launch">
+        <arg name="use_gui" value="true"/>
+    </include>
+
+    <node name="fanucTFListener" pkg="fanuc_listener" type="fanuc_listener.cpp" output="screen" />
+
+</launch>

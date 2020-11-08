@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1.3)
-project(fanuc_movit_config)
+project(fanuc_moveit_config)
 
 find_package(catkin REQUIRED)
 

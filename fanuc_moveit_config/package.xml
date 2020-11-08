@@ -1,6 +1,6 @@
 <package>
 
-  <name>fanuc_movit_config</name>
+  <name>fanuc_moveit_config</name>
   <version>0.3.0</version>
   <description>
      An automatically generated package with all the configuration and launch files for using the M20iA with the MoveIt! Motion Planning Framework
