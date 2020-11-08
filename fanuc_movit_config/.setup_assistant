@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: fanuc_description
+    relative_path: robot/fanuc_m20ia.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/M20iA.srdf
+  CONFIG:
+    author_name: Vincenzo Petrone
+    author_email: v.petrone6@studenti.unisa.it
+    generated_timestamp: 1604863682

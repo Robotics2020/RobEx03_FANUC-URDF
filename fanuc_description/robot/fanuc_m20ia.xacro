@@ -7,7 +7,7 @@
 
 <!-- **************************************** FANUC M-20iA URDF **************************************** -->
 
-<robot name="M-20iA" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="M20iA" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <!-- **************************************** VARIABLES **************************************** -->
 
@@ -61,7 +61,7 @@
     </xacro:macro>
 
     <!-- Macro for creating the flange -->
-    <xacro:macro name="create_flange" params="flange_name:='name' xyz:='0 0 0' rpy:='0 0 0' parent_link:='link6'" >
+    <xacro:macro name="create_flange" params="flange_name:='flange' xyz:='0 0 0' rpy:='0 0 0' parent_link:='link6'" >
         <link name="${flange_name}" />
 
         <joint name="${flange_name}" type="fixed">
@@ -125,7 +125,7 @@
     <!-- **************************************** LINKS **************************************** -->
 
     <!-- ******************** Used for fixing robot to Gazebo 'base_link' ******************** -->
-    <xacro:create_virtual_joint />
+    <!-- <xacro:create_virtual_joint /> -->
 
     <!-- ******************** BASE LINK  ******************** -->
     <xacro:link_joint index="0" />

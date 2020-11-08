@@ -1,5 +1,5 @@
 <launch>
     <include file="$(find urdf_tutorial)/launch/display.launch">
-        <arg name="model" value="$(find fanuc_description)/robot/FANUC_M-20iA.urdf"/>
+        <arg name="model" value="$(find fanuc_description)/robot/fanuc_m20ia.xacro"/>
     </include>
 </launch>
