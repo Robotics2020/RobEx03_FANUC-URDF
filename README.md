@@ -45,4 +45,6 @@ TODO.
 
 ## Usage
 
-To visualize the FANUC M-20iA robot model, just run `roslaunch fanuc_description fanuc.launch`.
+To visualize the FANUC M-20iA robot model, run `roslaunch fanuc_description fanuc.launch`.
+
+To get the TFs for all joints, run `roslaunch fanuc_listener_pkg fanuc fanuc_listener.launch`.

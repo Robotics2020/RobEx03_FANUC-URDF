@@ -7,18 +7,17 @@
 #include <geometry_msgs/TransformStamped.h>
 
 
-std::string target_frame = "link1";
+std::string target_frame = "base_link";
 std::string source_frame = "flange";
 
 
 int main(int argc, char** argv) {
     geometry_msgs::Transform transform;     // Current transform
-    geometry_msgs::Vector3 v;                          // Transform translation
-                           // Transform rotation
-    tf2::Vector3 axis;                       // Axis of axis-angle represenentation of transform rotation7
+    geometry_msgs::Vector3 v;               // Transform translation
+    geometry_msgs::Quaternion rotation;     // Transform rotation
+    tf2::Vector3 axis;                      // Axis of axis-angle represenentation of transform rotation7
     tf2Scalar angle;                        // Angle of axis-angle representation of transform rotation
     tf2Scalar roll, pitch, yaw;             // Angles of RPY representation of transform rotation 
-    std_msgs::String msg;                   // Message to log
     
     // Init node
     ros::init(argc, argv, "fanuc_listener");
@@ -37,17 +36,21 @@ int main(int argc, char** argv) {
 
         // Look for transforms
         try {
+            std::stringstream ss;
+            // Cycle through all links
             for (int l=1; l<=6; l++) {
-                std::cout << std::endl << "********** Link " << l << " to flange ***********" << std::endl;
+                // Print link information
+                ss << std::endl << "********** Link " << l << " to flange ***********" << std::endl;
 
-                std::stringstream sst;
-                sst << "link" << l;
-                target_frame = sst.str();
+                // Assign current link
+                std::stringstream linkNameStringStream;
+                linkNameStringStream << "link" << l;
+                target_frame = linkNameStringStream.str();
                 
                 // Get transform message
                 transform = tfBuffer.lookupTransform(target_frame, source_frame, ros::Time(0)).transform;
                 v = transform.translation;
-                geometry_msgs::Quaternion rotation = transform.rotation;
+                rotation = transform.rotation;
                 tf2::Quaternion q(rotation.x, rotation.y, rotation.z, rotation.w);
 
                 // Convert message to different representations
@@ -57,7 +60,6 @@ int main(int argc, char** argv) {
                 rotmatrix.getRPY(roll, pitch, yaw);
                 
                 // Cout the transform
-                std::stringstream ss;
                 ss << "- Translation: [" << v.x << ", " << v.y << ", " << v.z << "]" << std::endl;
                 ss << "- Rotation: " << std::endl << "\tin Quaternion [" << q.getX() << ", " << q.getY() << ", " << q.getZ() << ", " << q.getW() << "]" << std::endl;
                 ss << "\tin Axis-Angle [" << axis.getX() << ", " << axis.getY() << ", " << axis.getZ() << "], " << angle << std::endl;
@@ -66,10 +68,8 @@ int main(int argc, char** argv) {
                 for (int i=0; i<3; i++) {
                     ss << "\t\t[" << rotmatrix[i][0] << ", " << rotmatrix[i][1] << ", " << rotmatrix[i][2] << "]" << std::endl;
                 }
-                msg.data = ss.str();
-
-                std::cout << msg.data.c_str();
             }
+            ROS_INFO("%s", ss.str().c_str());
         } catch (tf2::TransformException &exception) {
             std::stringstream ss;
             ss << "Could NOT transform " << source_frame << " to " << target_frame;
