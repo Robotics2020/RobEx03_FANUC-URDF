@@ -29,7 +29,7 @@ The URDF file is available [here](https://github.com/Robotics2020/RobEx03_FANUC-
 
 > Create a fanuc_moveit_config package and visualize the robot in RViz.
 
-The moveit_config package is availabe [here](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_moveit_config).
+The moveit_config package is available [here](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_moveit_config).
 
 ## Point 4
 
@@ -41,7 +41,58 @@ The only ROS node is developed in the [fanuc_listener](https://github.com/Roboti
 
 > Verify the results by comparing with manual/MATLAB calculations.
 
-TODO.
+The results given by the node are always the same given by the node [tf_echo](http://docs.ros.org/en/melodic/api/tf/html/c++/tf__echo_8cpp_source.html). Anyway, sometimes the same quaternion provided by tf_echo and the developed node gives a different tuple of RPY-angles when coded in matlab.
+
+Here is an example:
+
+```matlab
+t = quat2tform([0.699679 0.111959 -0.697511 -0.106738
+rpy = tform2eul(t, "XYZ")
+```
+
+gives as output
+
+```matlab
+t =
+
+    0.0042   -0.0068   -1.0000         0
+   -0.3055    0.9521   -0.0078         0
+    0.9522    0.3056    0.0019         0
+         0         0         0    1.0000
+
+rpy =
+
+    1.3325   -1.5628    1.0219
+```
+
+while the information given by tf_echo are
+
+```text
+- Rotation: in Quaternion [0.112, -0.698, -0.107, 0.700]
+        in RPY (radian) [1.565, -1.260, -1.557]
+        in RPY (degree) [89.646, -72.207, -89.218]
+```
+
+and the information provided by the developed node are
+
+```text
+------- Quaternion -------
+[0.111959, -0.697511, -0.106738, 0.699679]
+
+------- Axis/angle -------
+Axis = [0.156705, -0.976281, -0.149398]
+Angle = 1.5917
+
+------- Rotation matrix -------
+[0.0042, -0.0068, -1]
+[-0.3056, 0.9521, -0.0078]
+[0.9522, 0.3056, 0.0019]
+
+------- Euler angles (RPY) -------
+[1.56458, -1.26036, -1.55705]
+```
+
+As shown, the rotation matrices are the same, but Euler angles are different (please remember that matlab codes quaternions in the format `w-x-y-z`, while the last code blocks use the format `x-y-z-w` as per [tf2](https://docs.ros.org/en/melodic/api/tf2/html/namespacetf2.html) library)
 
 ## Usage
 
