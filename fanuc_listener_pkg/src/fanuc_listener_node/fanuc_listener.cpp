@@ -1,9 +1,11 @@
+#include <math.h>
 #include <ros/ros.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/TransformStamped.h>
+
 
 std::string target_frame = "link1";
 std::string source_frame = "flange";
@@ -57,14 +59,15 @@ int main(int argc, char** argv) {
                 // Cout the transform
                 std::stringstream ss;
                 ss << "- Translation: [" << v.x << ", " << v.y << ", " << v.z << "]" << std::endl;
-                ss << "- Rotation: in Quaternion [" << q.getX() << ", " << q.getY() << ", " << q.getZ() << ", " << q.getW() << "]" << std::endl;
-                ss << "            in Axis-Angle [" << axis.getX() << ", " << axis.getY() << ", " << axis.getZ() << "], " << angle << std::endl;
-                ss << "            in RPY [" << roll << ", " << pitch << ", " << yaw << "]" << std::endl;
-                ss << "            Rotation matrix: " << std::endl;
+                ss << "- Rotation: " << std::endl << "\tin Quaternion [" << q.getX() << ", " << q.getY() << ", " << q.getZ() << ", " << q.getW() << "]" << std::endl;
+                ss << "\tin Axis-Angle [" << axis.getX() << ", " << axis.getY() << ", " << axis.getZ() << "], " << angle << std::endl;
+                ss << "\tin RPY [" << roll << ", " << pitch << ", " << yaw << "]" << std::endl;
+                ss << "\tRotation matrix: " << std::endl;
                 for (int i=0; i<3; i++) {
-                    ss << "            [" << rotmatrix[i][0] << ", " << rotmatrix[i][1] << ", " << rotmatrix[i][2] << "]" << std::endl;
+                    ss << "\t\t[" << rotmatrix[i][0] << ", " << rotmatrix[i][1] << ", " << rotmatrix[i][2] << "]" << std::endl;
                 }
                 msg.data = ss.str();
+
                 std::cout << msg.data.c_str();
             }
         } catch (tf2::TransformException &exception) {

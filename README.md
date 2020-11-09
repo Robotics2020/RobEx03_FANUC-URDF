@@ -23,19 +23,25 @@ The DH parameters are available at [this pdf](https://github.com/Robotics2020/Ro
 
 > Translate DH parameters to URDF and visualize the Fanuc robot in RViz with urdf_tutorial display.launch.
 
-The URDF file is available [here](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_description/robot/FANUC_M-20iA.urdf).
+The URDF file is available [here](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_description/robot/fanuc_m20iA.xacro).
 
 ## Point 3
 
 > Create a fanuc_moveit_config package and visualize the robot in RViz.
 
+The moveit_config package is availabe [here](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_moveit_config).
+
 ## Point 4
 
 > Visualize TFs in RViz and write one or more ROS nodes to compute and print the TF of the end-effector in all the reference frames of all joints. From the TF, compute the translational vector, the rotation matrix, the Euler angles and the axis-angle representation.
 
+The only ROS node is developed in the [fanuc_listener](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_listener_pkg) package.
+
 ## Point 5
 
 > Verify the results by comparing with manual/MATLAB calculations.
+
+TODO.
 
 ## Usage
 
