@@ -4,6 +4,6 @@
         <arg name="use_gui" value="true"/>
     </include>
 
-    <node name="fanucTFListener" pkg="fanuc_listener" type="fanuc_listener.cpp" output="screen" />
+    <node name="fanucTFListener" pkg="fanuc_listener_pkg" type="fanuc_listener_node" output="screen" />
 
 </launch>
