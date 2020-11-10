@@ -46,7 +46,7 @@ The results given by the node are always the same given by the node [tf_echo](ht
 Here is an example:
 
 ```matlab
-t = quat2tform([0.699679 0.111959 -0.697511 -0.106738
+t = quat2tform([0.699679 0.111959 -0.697511 -0.106738])
 rpy = tform2eul(t, "XYZ")
 ```
 
