@@ -23,7 +23,7 @@ The DH parameters are available at [this pdf](https://github.com/Robotics2020/Ro
 
 > Translate DH parameters to URDF and visualize the Fanuc robot in RViz with urdf_tutorial display.launch.
 
-The URDF file is available [here](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_description/robot/fanuc_m20iA.xacro).
+The URDF file is available [here](https://github.com/Robotics2020/RobEx03_FANUC-URDF/blob/master/fanuc_description/robot/fanuc_m20ia.xacro).
 
 ## Point 3
 
