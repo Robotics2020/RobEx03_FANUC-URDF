@@ -98,4 +98,4 @@ As shown, the rotation matrices are the same, but Euler angles are different (pl
 
 To visualize the FANUC M-20iA robot model, run `roslaunch fanuc_description fanuc.launch`.
 
-To get the TFs for all joints, run `roslaunch fanuc_listener_pkg fanuc fanuc_listener.launch`.
+To get the TFs for all joints, run `roslaunch fanuc_listener_pkg fanuc_listener.launch`.
